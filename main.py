@@ -3,13 +3,11 @@
 import flask
 import nest
 import nest.topology as topo
-import numpy as np
 import optparse
 import sys
 
-from distutils.util import strtobool
 from flask import Flask, request, jsonify
-from lib.stringify import stringify
+from lib.nest_client import nest_client
 
 app = Flask(__name__)
 
@@ -19,10 +17,11 @@ def index():
     response = {
         'name': 'NEST web API',
         'ref': 'http://www.github.com/babsey/nest-web-api',
-        'server': 'Flask',
+        'server': {'name': 'Flask'},
     }
     try:
-        response['version'] = flask.__version__
+        response['server']['version'] = flask.__version__
+        response['server']['compatible'] = flask.__version__ > '0.11.0'
         response['status'] = 'ok'
     except Exception as e:
         response['msg'] = str(e)
@@ -38,17 +37,8 @@ def router_NEST(method='version'):
         'module': 'nest',
     }
     try:
-        func = nest.__dict__[method]
-        if request.is_json:
-            kwargs = request.get_json()
-            data['args'] = kwargs
-            nest_response = func(**kwargs)
-        else:
-            nest_response = func()
-        return_response = bool(
-            strtobool(request.args.get('return_response', 'true')))
-        if nest_response is not None and return_response:
-            data['response'] = stringify(nest_response)
+        call = nest.__dict__[method]
+        nest_client(request, call, data)
         data['status'] = 'ok'
     except Exception as e:
         data['msg'] = str(e)
@@ -63,17 +53,8 @@ def router_NEST_topology(method):
         'module': 'nest.topology',
     }
     try:
-        func = topo.__dict__[method]
-        if request.is_json:
-            kwargs = request.get_json()
-            data['args'] = kwargs
-            nest_response = func(**kwargs)
-        else:
-            nest_response = func()
-        return_response = bool(
-            strtobool(request.args.get('return_response', 'true')))
-        if nest_response is not None and return_response:
-            data['response'] = stringify(nest_response)
+        call = topo.__dict__[method]
+        nest_client(request, call, data)
         data['status'] = 'ok'
     except Exception as e:
         data['msg'] = str(e)

@@ -1,7 +1,5 @@
 #!/bin/bash
-
-export NEST_SERVER=localhost:5000
-export NEST_API=$NEST_SERVER/nest
+bash nest-server_vars.sh 
 
 curl $NEST_API/ResetKernel
 curl $NEST_API/GetKernelStatus

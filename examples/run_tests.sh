@@ -1,6 +1,5 @@
 #!/bin/bash
-
-export NEST_SERVER=localhost:5000
+bash nest-server_vars.sh 
 
 curl $NEST_SERVER/nest/ResetKernel
 
