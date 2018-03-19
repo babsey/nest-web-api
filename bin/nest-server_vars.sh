@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NEST_SERVER=localhost:5001
+export NEST_SERVER=localhost:5000
 export NEST_API=$NEST_SERVER/nest
 export NEST_TOPO_API=$NEST_SERVER/nest_topology
 
