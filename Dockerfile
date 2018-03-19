@@ -32,4 +32,5 @@ COPY ./ /NEST_web_API
 WORKDIR /NEST_web_API
 
 EXPOSE 5000
+RUN chmod 755 entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

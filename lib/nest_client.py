@@ -5,6 +5,9 @@ from stringify import stringify
 def nest_client(request, call, data):
     if callable(call):
         func = call
+        if bool(
+                strtobool(request.args.get('return_doc', 'false'))):
+            data['__doc__'] = func.__doc__
         if request.is_json:
             data['request'] = {'json': request.get_json()}
             nest_response = func(**data['request']['json'])

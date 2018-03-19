@@ -77,12 +77,6 @@ python main.py -p 8000
 
 ## Docker
 
-Make sure that the entrypoint is executable.
-If not, change the access mode.
-```
-sudo chmod 755 entrypoint.sh
-```
-
 Build a docker image.
 ```
 docker build -t nest-server .
@@ -99,6 +93,11 @@ curl localhost:5000
 ```
 
 ## Examples
+
+Load NEST server environments
+```
+source bin/nest-server_vars.sh
+```
 
 Some examples for sending requests to NEST server.
 ```
