@@ -7,12 +7,17 @@ import optparse
 import sys
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 from lib.nest_client import nest_client
 
 app = Flask(__name__)
+CORS(app)
+
+toFixed = True
 
 
 @app.route('/', methods=['GET'])
+@cross_origin()
 def index():
     response = {
         'name': 'NEST web API',
@@ -31,6 +36,7 @@ def index():
 
 @app.route('/nest/', methods=['GET'])
 @app.route('/nest/<method>', methods=['GET', 'POST'])
+@cross_origin()
 def router_NEST(method='version'):
     data = {
         'method': method,
@@ -38,7 +44,7 @@ def router_NEST(method='version'):
     }
     try:
         call = nest.__dict__[method]
-        nest_client(request, call, data)
+        nest_client(request, call, data, toFixed)
         data['status'] = 'ok'
     except Exception as e:
         data['msg'] = str(e)
@@ -54,7 +60,7 @@ def router_NEST_topology(method):
     }
     try:
         call = topo.__dict__[method]
-        nest_client(request, call, data)
+        nest_client(request, call, data, toFixed)
         data['status'] = 'ok'
     except Exception as e:
         data['msg'] = str(e)

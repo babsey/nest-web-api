@@ -2,7 +2,7 @@ from distutils.util import strtobool
 from stringify import stringify
 
 
-def nest_client(request, call, data):
+def nest_client(request, call, data, *args, **kwargs):
     if callable(call):
         func = call
         if bool(
@@ -24,4 +24,4 @@ def nest_client(request, call, data):
     return_response = bool(
         strtobool(request.args.get('return_response', 'true')))
     if nest_response is not None and return_response:
-        data['response'] = stringify(nest_response)
+        data['response'] = stringify(nest_response, *args, **kwargs)
