@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     python-pip \
     wget
 
-RUN pip install flask
+RUN pip install flask flask_cors
 
 WORKDIR /tmp
 RUN wget https://github.com/nest/nest-simulator/archive/v2.14.0.tar.gz && \
