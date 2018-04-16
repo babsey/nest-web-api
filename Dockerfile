@@ -13,23 +13,22 @@ RUN apt-get update && apt-get install -y \
     python-all-dev \
     python-numpy \
     python-pip \
-    wget
+    git
 
 RUN pip install flask flask_cors
 
 WORKDIR /tmp
-RUN wget https://github.com/nest/nest-simulator/archive/v2.14.0.tar.gz && \
-    tar -xvzf v2.14.0.tar.gz && \
+RUN git clone https://github.com/nest/nest-simulator && \
     mkdir /tmp/nest-build
 
 WORKDIR /tmp/nest-build
-RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ ../nest-simulator-2.14.0 && \
+RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ ../nest-simulator && \
     make && \
     make install && \
     rm -rf /tmp/*
 
-COPY ./ /NEST_web_API
-WORKDIR /NEST_web_API
+COPY ./ /nest-web-api
+WORKDIR /nest-web-api
 
 EXPOSE 5000
 RUN chmod 755 entrypoint.sh

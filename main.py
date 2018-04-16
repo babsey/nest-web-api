@@ -35,9 +35,25 @@ def index():
 
 
 @app.route('/nest/', methods=['GET'])
+@app.route('/nest/__dict__', methods=['GET'])
+@cross_origin()
+def router_nest(method='version'):
+    data = {
+        'module': 'nest',
+    }
+    try:
+        call = nest.__dict__.keys
+        nest_client(request, call, data, toFixed)
+        data['status'] = 'ok'
+    except Exception as e:
+        data['msg'] = str(e)
+        data['status'] = 'error'
+    return jsonify(data)
+
+
 @app.route('/nest/<method>', methods=['GET', 'POST'])
 @cross_origin()
-def router_NEST(method='version'):
+def router_nest_method(method='version'):
     data = {
         'method': method,
         'module': 'nest',
@@ -52,8 +68,25 @@ def router_NEST(method='version'):
     return jsonify(data)
 
 
+@app.route('/nest_topology/', methods=['GET'])
+@app.route('/nest_topology/__dict__', methods=['GET'])
+@cross_origin()
+def router_topo(method='version'):
+    data = {
+        'module': 'nest',
+    }
+    try:
+        call = topo.__dict__.keys
+        nest_client(request, call, data, toFixed)
+        data['status'] = 'ok'
+    except Exception as e:
+        data['msg'] = str(e)
+        data['status'] = 'error'
+    return jsonify(data)
+
+
 @app.route('/nest_topology/<method>', methods=['GET', 'POST'])
-def router_NEST_topology(method):
+def router_topo_method(method):
     data = {
         'method': method,
         'module': 'nest.topology',
