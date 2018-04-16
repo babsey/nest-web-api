@@ -1,5 +1,5 @@
-# NEST web API
-A web API for NEST
+# nest-web-api
+A web API for NEST simulator
 
 ## Requirements
 
