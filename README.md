@@ -11,14 +11,13 @@ To use this API you'll need [NEST](http://www.nest-simulator.org/) and [Flask](h
 Install standard configuration before installing NEST
 ```
 sudo apt-get install -y build-essential cmake libltdl7-dev libreadline6-dev \
-libncurses5-dev libgsl0-dev python-all-dev python-numpy wget
+libncurses5-dev libgsl0-dev python-all-dev python-numpy git
 ```
 
 Clone NEST with PyNEST in your home folder.
 Read the [installation instructions](http://www.nest-simulator.org/installation/).
 ```
-wget https://github.com/nest/nest-simulator/releases/download/v2.14.0/nest-2.14.0.tar.gz
-tar -zxf nest-2.14.0.tar.gz
+git clone https://github.com/nest/nest-simulator
 ```
 
 Go to build folder for compiling NEST.
