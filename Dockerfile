@@ -27,8 +27,8 @@ RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ ../nest-simulator && \
     make install && \
     rm -rf /nest-simulator /nest-build
 
-COPY ./ /nest-web-api
-WORKDIR /nest-web-api
+COPY ./ /opt/nest-web-api
+WORKDIR /opt/nest-web-api
 
 EXPOSE 5000
 RUN chmod 755 entrypoint.sh
