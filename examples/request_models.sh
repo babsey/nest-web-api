@@ -33,8 +33,8 @@ curl -d "mtype=nodes&sel=meter" $NEST_API/Models
 
 # GET request in args, values can be only strings
 
-curl $NEST_API/Models?mtype=nodes
-curl $NEST_API/Models?mtype=synapses
+curl "$NEST_API/Models?mtype=nodes"
+curl "$NEST_API/Models?mtype=synapses"
 
 curl "$NEST_API/Models?mtype=nodes&sel=neuron"
 curl "$NEST_API/Models?mtype=nodes&sel=iaf"

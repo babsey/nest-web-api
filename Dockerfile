@@ -17,15 +17,15 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install flask flask_cors
 
-WORKDIR /tmp
+WORKDIR /
 RUN git clone https://github.com/nest/nest-simulator && \
-    mkdir /tmp/nest-build
+    mkdir /nest-build
 
-WORKDIR /tmp/nest-build
+WORKDIR /nest-build
 RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ ../nest-simulator && \
     make && \
     make install && \
-    rm -rf /tmp/*
+    rm -rf /nest-simulator /nest-build
 
 COPY ./ /nest-web-api
 WORKDIR /nest-web-api

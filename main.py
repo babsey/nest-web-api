@@ -8,12 +8,11 @@ import sys
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from lib.nest_client import nest_client
+
+from lib.clients import nest_client, sli_client
 
 app = Flask(__name__)
 CORS(app)
-
-toFixed = True
 
 
 @app.route('/', methods=['GET'])
@@ -22,83 +21,55 @@ def index():
     response = {
         'name': 'NEST web API',
         'ref': 'http://www.github.com/babsey/nest-web-api',
-        'server': {'name': 'Flask'},
+        'server': {
+            'name': 'Flask',
+            'version': flask.__version__,
+            'compatible': flask.__version__ > '0.11.0',
+        },
     }
-    try:
-        response['server']['version'] = flask.__version__
-        response['server']['compatible'] = flask.__version__ > '0.11.0'
-        response['status'] = 'ok'
-    except Exception as e:
-        response['msg'] = str(e)
-        response['status'] = 'error'
     return jsonify(response)
 
 
 @app.route('/nest/', methods=['GET'])
 @app.route('/nest/__dict__', methods=['GET'])
 @cross_origin()
-def router_nest(method='version'):
-    data = {
-        'module': 'nest',
-    }
-    try:
-        call = nest.__dict__.keys
-        nest_client(request, call, data, toFixed)
-        data['status'] = 'ok'
-    except Exception as e:
-        data['msg'] = str(e)
-        data['status'] = 'error'
-    return jsonify(data)
+def router_nest():
+    response = nest_client(request, nest.__dict__.keys)
+    return jsonify(response)
 
 
-@app.route('/nest/<method>', methods=['GET', 'POST'])
+@app.route('/nest/<call>', methods=['GET', 'POST'])
 @cross_origin()
-def router_nest_method(method='version'):
-    data = {
-        'method': method,
-        'module': 'nest',
-    }
-    try:
-        call = nest.__dict__[method]
-        nest_client(request, call, data, toFixed)
-        data['status'] = 'ok'
-    except Exception as e:
-        data['msg'] = str(e)
-        data['status'] = 'error'
-    return jsonify(data)
+def router_nest_call(call):
+    response = nest_client(request, nest.__dict__[call])
+    return jsonify(response)
 
 
 @app.route('/nest_topology/', methods=['GET'])
 @app.route('/nest_topology/__dict__', methods=['GET'])
 @cross_origin()
-def router_topo(method='version'):
-    data = {
-        'module': 'nest',
-    }
-    try:
-        call = topo.__dict__.keys
-        nest_client(request, call, data, toFixed)
-        data['status'] = 'ok'
-    except Exception as e:
-        data['msg'] = str(e)
-        data['status'] = 'error'
-    return jsonify(data)
+def router_topo():
+    response = nest_client(request, topo.__dict__.keys)
+    return jsonify(response)
 
 
-@app.route('/nest_topology/<method>', methods=['GET', 'POST'])
-def router_topo_method(method):
-    data = {
-        'method': method,
-        'module': 'nest.topology',
-    }
-    try:
-        call = topo.__dict__[method]
-        nest_client(request, call, data, toFixed)
-        data['status'] = 'ok'
-    except Exception as e:
-        data['msg'] = str(e)
-        data['status'] = 'error'
-    return jsonify(data)
+@app.route('/nest_topology/<call>', methods=['GET', 'POST'])
+def router_topo_call(call):
+    response = nest_client(request, topo.__dict__[call])
+    return jsonify(response)
+
+
+@app.route('/sli/<call>', methods=['GET', 'POST'])
+@cross_origin()
+def router_sli_call(call):
+    response = sli_client(request, nest.__dict__[call])
+    return jsonify(response)
+
+@app.route('/sli/<call>/<argument>')
+@cross_origin()
+def router_sli_call_argument(call, argument):
+    response = nest.__dict__[call](argument)
+    return jsonify(response)
 
 
 if __name__ == '__main__':
