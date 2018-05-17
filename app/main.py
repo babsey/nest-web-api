@@ -9,7 +9,7 @@ import sys
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
-from lib.clients import nest_client, sli_client
+from lib.client import nest_client
 
 app = Flask(__name__)
 CORS(app)
@@ -24,13 +24,13 @@ def index():
         'server': {
             'name': 'Flask',
             'version': flask.__version__,
-            'compatible': flask.__version__ > '0.11.0',
+            'compatible': '0.11.0' < flask.__version__ < '1.0.0',
         },
     }
     return jsonify(response)
 
 
-@app.route('/nest/', methods=['GET'])
+@app.route('/nest', methods=['GET'])
 @app.route('/nest/__dict__', methods=['GET'])
 @cross_origin()
 def router_nest():
@@ -45,7 +45,7 @@ def router_nest_call(call):
     return jsonify(response)
 
 
-@app.route('/nest_topology/', methods=['GET'])
+@app.route('/nest_topology', methods=['GET'])
 @app.route('/nest_topology/__dict__', methods=['GET'])
 @cross_origin()
 def router_topo():
@@ -56,19 +56,6 @@ def router_topo():
 @app.route('/nest_topology/<call>', methods=['GET', 'POST'])
 def router_topo_call(call):
     response = nest_client(request, topo.__dict__[call])
-    return jsonify(response)
-
-
-@app.route('/sli/<call>', methods=['GET', 'POST'])
-@cross_origin()
-def router_sli_call(call):
-    response = sli_client(request, nest.__dict__[call])
-    return jsonify(response)
-
-@app.route('/sli/<call>/<argument>')
-@cross_origin()
-def router_sli_call_argument(call, argument):
-    response = nest.__dict__[call](argument)
     return jsonify(response)
 
 

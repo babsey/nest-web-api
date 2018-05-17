@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 curl $NEST_API/ResetKernel
 
 curl -H "Content-Type: application/json" -d '{"existing": "iaf_psc_alpha", "new": "my_neuron", "params": {"V_th": -45.0}}' $NEST_API/CopyModel

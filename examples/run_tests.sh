@@ -1,6 +1,7 @@
 #!/bin/bash
 
-curl $NEST_SERVER/nest/ResetKernel
 
-curl $NEST_SERVER/nest/test
-curl $NEST_SERVER/nest_topology/test
+curl $NEST_API/ResetKernel
+
+curl $NEST_API/test
+curl $NEST_TOPO_API/test

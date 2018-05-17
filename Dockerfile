@@ -15,10 +15,10 @@ RUN apt-get update && apt-get install -y \
     python-pip \
     git
 
-RUN pip install flask flask_cors
+RUN pip install flask==0.12.4 flask_cors
 
 WORKDIR /
-RUN git clone https://github.com/nest/nest-simulator && \
+RUN git clone https://github.com/nest/nest-simulator --depth 1 && \
     mkdir /nest-build
 
 WORKDIR /nest-build
@@ -27,7 +27,11 @@ RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ ../nest-simulator && \
     make install && \
     rm -rf /nest-simulator /nest-build
 
-COPY ./ /opt/nest-web-api
+# ENV LISTEN_PORT 5000
+# ENV UWSGI_INI /opt/nest-web-api/uwsgi.ini
+# ENV NGINX_WORKER_PROCESSES auto
+
+COPY ./app /opt/nest-web-api
 WORKDIR /opt/nest-web-api
 
 EXPOSE 5000
