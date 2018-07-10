@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+# Only works if SLI functions are accepted.
+
 # Reset kernel
 curl -d 'cmd=ResetKernel' $NEST_API/sr
 

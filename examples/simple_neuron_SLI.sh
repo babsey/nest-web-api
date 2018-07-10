@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+# Only works if SLI function is accepted.
+
 # Reset kernel
 curl -H "Content-Type: application/json" -d '["ResetKernel"]' $NEST_API/sli_func
 

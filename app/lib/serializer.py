@@ -18,7 +18,7 @@ params_infinite = [
 ]
 
 
-def serialize(data, toFixed=True):
+def serialize(data, toFixed=False):
 
     if type(data) in [array.array, np.ndarray]:
         data = data.tolist()

@@ -9,10 +9,19 @@ import sys
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
-from lib.client import nest_client
+import lib.initializer as init
+import lib.client as client
 
 app = Flask(__name__)
 CORS(app)
+
+nest_calls = dir(nest)
+nest_calls = filter(lambda x: not x.startswith('_'), nest_calls)
+nest_calls.sort()
+
+topo_calls = dir(topo)
+topo_calls = filter(lambda x: not x.startswith('_'), topo_calls)
+topo_calls.sort()
 
 
 @app.route('/', methods=['GET'])
@@ -31,31 +40,48 @@ def index():
 
 
 @app.route('/nest', methods=['GET'])
-@app.route('/nest/__dict__', methods=['GET'])
 @cross_origin()
 def router_nest():
-    response = nest_client(request, nest.__dict__.keys)
+    data, args, kwargs = init.data_and_args(request)
+    response = client.nest(request, nest_calls, data)
     return jsonify(response)
 
 
 @app.route('/nest/<call>', methods=['GET', 'POST'])
 @cross_origin()
 def router_nest_call(call):
-    response = nest_client(request, nest.__dict__[call])
+    data, args, kwargs = init.data_and_args(request, call)
+    if call in nest_calls:
+        call = nest.__dict__[call]
+        response = client.nest(request, call, data, *args, **kwargs)
+    else:
+        data['response']['msg'] = 'The request cannot be called in NEST.'
+        data['response']['status'] = 'error'
+        response = data
     return jsonify(response)
 
 
+@app.route('/topo', methods=['GET'])
 @app.route('/nest_topology', methods=['GET'])
-@app.route('/nest_topology/__dict__', methods=['GET'])
 @cross_origin()
 def router_topo():
-    response = nest_client(request, topo.__dict__.keys)
+    data, args, kwargs = init.data_and_args(request)
+    response = client.nest(request, topo_calls, data)
     return jsonify(response)
 
 
+@app.route('/topo/<call>', methods=['GET', 'POST'])
 @app.route('/nest_topology/<call>', methods=['GET', 'POST'])
+@cross_origin()
 def router_topo_call(call):
-    response = nest_client(request, topo.__dict__[call])
+    data, args, kwargs = init.data_and_args(request, call)
+    if call in topo_calls:
+        call = topo.__dict__[call]
+        response = client.nest(request, call, data, *args, **kwargs)
+    else:
+        data['response']['msg'] = 'The request cannot be called in NEST Topology.'
+        data['response']['status'] = 'error'
+        response = data
     return jsonify(response)
 
 

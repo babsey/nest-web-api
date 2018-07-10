@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+# Only works if SLI function is accepted.
+
 # 2 + 3 = 5
 curl -H "Content-Type: application/json" -d '["add", 2, 3]' $NEST_API/sli_func
 
