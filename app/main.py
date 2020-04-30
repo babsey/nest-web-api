@@ -16,11 +16,11 @@ app = Flask(__name__)
 CORS(app)
 
 nest_calls = dir(nest)
-nest_calls = filter(lambda x: not x.startswith('_'), nest_calls)
+nest_calls = list(filter(lambda x: not x.startswith('_'), nest_calls))
 nest_calls.sort()
 
 topo_calls = dir(topo)
-topo_calls = filter(lambda x: not x.startswith('_'), topo_calls)
+topo_calls = list(filter(lambda x: not x.startswith('_'), topo_calls))
 topo_calls.sort()
 
 
